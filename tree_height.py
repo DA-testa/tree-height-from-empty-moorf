@@ -2,46 +2,26 @@ import sys
 import threading
 import numpy
 
-
-def compute_height(n, parents):
-    children = [[] for _ in range(n)]
-    for i in range(n):
-        parent = parents[i]
-        if parent == -1:
-            root = i
-        else:
-            children[parent].append(i)
-
-    def compute_depth(node): #gets max height
-        if not children[node]:
-            return 1
-        max_depth = 0
-        for child in children[node]:
-            depth = compute_depth(child)
-            max_depth = max(max_depth, depth)
-        return max_depth + 1
-
-    return compute_depth(root) #max height
-
+def compute_height(root, parents):
+    children = numpy.where(parents == root)[0]
+    if children.size == 0:
+        return 0
+    return max(compute_height(child, parents) for child in children) + 1
 
 def main():
+    root = -1
     select_input = input("input - F or I")
     if select_input.upper() == "F":
         file_path = input("choose file (input path)")
-        if file_path == "test/25":
-            print("Nepareiza atbilde")
-            return
-
         with open(file_path, "r") as f:
             n = int(f.readline())
-            parents = list(map(int, f.readline().split()))
-            print(compute_height(n, parents))
+            parents = numpy.array(f.readline().split(), dtype=numpy.int32)
+            print(compute_height(root, parents))
     else:
         n = int(input())
-        parents = list(map(int, input().split()))
-        print(compute_height(n, parents))
+        parents = numpy.array(f.readline().split(), dtype=numpy.int32)
+        print(compute_height(root, parents))
     pass
-
 
 # In Python, the default limit on recursion depth is rather low,
 # so raise it here for this problem. Note that to take advantage
@@ -49,4 +29,3 @@ def main():
 sys.setrecursionlimit(10**7)  # max depth of recursion
 threading.stack_size(2**27)  # new thread will get stack of such size
 threading.Thread(target=main).start()
-# print(numpy.array([1,2,3]))
