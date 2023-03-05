@@ -1,33 +1,31 @@
-# python3
-
 import sys
 import threading
 import numpy
 
-
-def compute_height(n, parents):
-    # Write this function
-    max_height = 0
-    # Your code here
-    return max_height
-
+def compute_height(root, parents):
+    children = numpy.where(parents == root)[0]
+    if children.size == 0:
+        return 0
+    return max(compute_height(child, parents) for child in children) + 1
 
 def main():
-    # implement input form keyboard and from files
-    
-    # let user input file name to use, don't allow file names with letter a
-    # account for github input inprecision
-    
-    # input number of elements
-    # input values in one variable, separate with space, split these values in an array
-    # call the function and output it's result
+    root = -1
+    select_input = input("input - F or I")
+    if select_input.upper() == "F":
+        file_path = input("choose file (input path)")
+        with open(file_path, "r"):
+            n = int(f.readline())
+            parents = numpy.array(f.readline().split(), dtype=numpy.int32)
+            print(compute_height(root, parents))
+    else:
+        n = int(input())
+        parents = numpy.array(input().split(), dtype=numpy.int32)
+        print(compute_height(root, parents))
     pass
 
 # In Python, the default limit on recursion depth is rather low,
 # so raise it here for this problem. Note that to take advantage
 # of bigger stack, we have to launch the computation in a new thread.
 sys.setrecursionlimit(10**7)  # max depth of recursion
-threading.stack_size(2**27)   # new thread will get stack of such size
+threading.stack_size(2**27)  # new thread will get stack of such size
 threading.Thread(target=main).start()
-main()
-# print(numpy.array([1,2,3]))
