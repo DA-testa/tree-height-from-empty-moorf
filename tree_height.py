@@ -13,13 +13,13 @@ def main():
     select_input = input("input - F or I")
     if select_input.upper() == "F":
         file_path = input("choose file (input path)")
-        with open(file_path, "r") as f:
+        with open(file_path, "r"):
             n = int(f.readline())
             parents = numpy.array(f.readline().split(), dtype=numpy.int32)
             print(compute_height(root, parents))
     else:
         n = int(input())
-        parents = numpy.array(f.readline().split(), dtype=numpy.int32)
+        parents = numpy.array(input().split(), dtype=numpy.int32)
         print(compute_height(root, parents))
     pass
 
